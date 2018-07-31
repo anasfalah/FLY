@@ -7,6 +7,8 @@ package com.flyteam.mastermind;
 
 import com.flyteam.mastermind.client.ApiClient;
 import com.flyteam.mastermind.client.ProposalResult;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -14,22 +16,60 @@ import com.flyteam.mastermind.client.ProposalResult;
  */
 public class SimpleElementsFinder {
 
+    public static class ElementChecker implements Runnable {
+
+        char element;
+        int size;
+        int found;
+        ApiClient client;
+
+        public ElementChecker(char elementToCheck, ApiClient client, int size) {
+            this.element = elementToCheck;
+            this.client = client;
+            this.size = size;
+        }
+
+        @Override
+        public void run() {
+            try {
+                StringBuilder test = new StringBuilder();
+                for (int j = 0; j < size; j++) {
+                    test.append(element);
+                }
+                ProposalResult apiResult = client.test(test.toString());
+                this.found = apiResult.getGood() + apiResult.getWrong_place();
+            } catch (Exception e) {
+                throw new Error("Problem while checking element " + this.element, e);
+            }
+        }
+
+    }
+
     public String find(ApiClient client, int size) throws Exception {
-        StringBuilder res = new StringBuilder();
-        int correctCharacters = 0;
+        List<ElementChecker> runnables = new ArrayList<>();
+        List<Thread> threads = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            StringBuilder test = new StringBuilder();
-            for (int j = 0; j < size; j++) {
-                test.append(i);
+            ElementChecker r = new ElementChecker(Character.forDigit(i, 10), client, size);
+            runnables.add(r);
+            Thread t = new Thread(r);
+            threads.add(t);
+            t.start();
+        }
+        Boolean isThreadRunning;
+        do {
+            isThreadRunning = false;
+            for (Thread t : threads) {
+                isThreadRunning = !t.isInterrupted();
+                if (isThreadRunning) {
+                    break;
+                }
             }
-            ProposalResult apiResult = client.test(test.toString());
-            int elementsDetected = apiResult.getGood() + apiResult.getWrong_place();
-            for (int k = 0; k < elementsDetected; k++) {
-                res.append(i);
-            }
-            correctCharacters += elementsDetected;
-            if (correctCharacters == size) {
-                break;
+        } while (isThreadRunning);
+
+        StringBuilder res = new StringBuilder();
+        for (ElementChecker runnable : runnables) {
+            for (int k = 0; k < runnable.found; k++) {
+                res.append(runnable.element);
             }
         }
         return res.toString();
