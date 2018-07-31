@@ -23,7 +23,7 @@ public class SimpleElementsFinder {
                 test.append(i);
             }
             ProposalResult apiResult = client.test(test.toString());
-            int elementsDetected = apiResult.getGood() + apiResult.getWrong_place();
+            int elementsDetected = apiResult.getGood() + apiResult.getWrong_place() - correctCharacters;
             for (int k = 0; k < elementsDetected; k++) {
                 res.append(i);
             }
