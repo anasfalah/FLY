@@ -6,11 +6,58 @@
 package com.flyteam.mastermind.client;
 
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import javax.ws.rs.core.MediaType;
 
 /**
  *
  * @author jtapiat
  */
 public class ApiClient {
+
+    private static final String TOKEN = "tokenfly";
+    private static final String START_RESOURCE = "/api/start";
+    private static final String TEST_RESOURCE = "/api/test";
+
+    private Client client;
+    private String ip;
+    private int port;
+
+    public ApiClient() {
+        client = client.create();
+    }
+
+    public Integer start() throws Exception {
+        ClientResponse response = null;
+        try {
+            Request request = new Request();
+            request.setToken(TOKEN);
+            response = client.resource("http://" + ip + ":" + port + START_RESOURCE)
+                    .accept(MediaType.APPLICATION_JSON_TYPE)
+                    .post(ClientResponse.class, request);
+            return response.getEntity(StartReturn.class).getSize();
+        } finally {
+            if (response != null) {
+                response.close();
+            }
+        }
+    }
+
+    public ProposalResult test(String proposal) throws Exception {
+        ClientResponse response = null;
+        try {
+            Request request = new Request();
+            request.setToken(TOKEN);
+            request.setResult(proposal);
+            response = client.resource("http://" + ip + ":" + port + TEST_RESOURCE)
+                    .accept(MediaType.APPLICATION_JSON_TYPE)
+                    .post(ClientResponse.class, request);
+            return response.getEntity(ProposalResult.class);
+        } finally {
+            if (response != null) {
+                response.close();
+            }
+        }
+    }
 
 }
