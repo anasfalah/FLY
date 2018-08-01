@@ -37,12 +37,12 @@ public class App {
             if (null != proposalResult) {
                 // archived first result
                 firstOk = proposalResult.getGood();
-                firstWp = proposalResult.getWrong_place();
+                firstWp = proposalResult.getWrongPlace();
                 if (proposalResult.getGood() == sizeStart) {
                     // case when all is OK
                     isResultOk = true;
                     finalResult = chInitiale;
-                } else if(proposalResult.getWrong_place() == sizeStart){
+                } else if(proposalResult.getWrongPlace() == sizeStart){
                     // case when all numbers not good placed
                     
                 }else {
@@ -55,7 +55,7 @@ public class App {
                            proposalResult = apiClient.test(chReplaced);
                            if(null != proposalResult) {
                               int good = proposalResult.getGood();
-                              int wrongPlaced = proposalResult.getWrong_place();
+                              int wrongPlaced = proposalResult.getWrongPlace();
                               if(good > firstOk) {
                                   finalResult = replaceCharacter(c, finalResult, position);
                                   position++;
