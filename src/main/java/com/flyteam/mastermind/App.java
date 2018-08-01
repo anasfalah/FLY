@@ -19,7 +19,6 @@ import com.flyteam.mastermind.client.ProposalResult;
  */
 public class App {
 
-    
     static Set<String> permutations;
     static Set<String> result = new HashSet<String>();
 
@@ -27,8 +26,7 @@ public class App {
         permutations = new HashSet<String>();
 
         int n = string.length();
-        for (int i = n - 1; i >= 0; i--) 
-        {
+        for (int i = n - 1; i >= 0; i--) {
             shuffle(string.charAt(i));
         }
         return permutations;
@@ -58,12 +56,13 @@ public class App {
             result = new HashSet<String>();
         }
     }
+
     /**
-     * 
+     *
      * @param args
      * @throws Exception
      */
-    public void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         ApiClient apiClient = new ApiClient();
         String finalResult = "";
         int firstOk = 0;
@@ -72,54 +71,60 @@ public class App {
         SimpleElementsFinder sef = new SimpleElementsFinder();
         String chInitiale = sef.find(client, size);
         ProposalResult proposalResult = apiClient.test(chInitiale);
-        if (null != proposalResult) {
-            // archived first result
-            firstOk = proposalResult.getGood();
+        // archived first result
+        firstOk = proposalResult.getGood();
+        int nb = 0;
+        while (proposalResult.getGood() != size) {
             if (proposalResult.getGood() == size) {
                 // case when all is OK
                 finalResult = chInitiale;
+                System.out.println("1" + finalResult);
             } else {
-                for(int position = 0; position < size; position++) {
-                    for (int i = position+1; i < size; i++) {
+                for (int position = 0; position < size; position++) {
+                    System.out.println("OK Start " + firstOk);
+                    for (int i = position + 1; i < size; i++) {
+                        nb++;
                         String chReplaced = invertChar(chInitiale, position, i);
+                        System.out.println(chInitiale + " replaced by " + chReplaced);
                         proposalResult = apiClient.test(chReplaced);
-                        if(proposalResult.getGood() == size) {
+                        System.out.println("good " + proposalResult.getGood());
+                        if (proposalResult.getGood() == size) {
+                            System.out.println(chReplaced);
                             finalResult = chReplaced;
                             position = size;
                             i = size;
-                            break;
-                        }
-                        if(proposalResult.getGood() == (firstOk + 2)) {
+                        } else if (proposalResult.getGood() > firstOk) {
+                            System.out.println("Replacing : " + chInitiale);
                             chInitiale = chReplaced;
+                            firstOk = proposalResult.getGood();
+                            i = size;
                         }
                     }
                 }
             }
         }
-        System.out.println(finalResult);
+        System.out.println(nb);
+        System.out.println("final; " + finalResult);
     }
 
-    
-    
     public String test(String initChaine, ApiClient apiClient)
-    throws Exception{
+            throws Exception {
         String chResult = "";
         Set<String> result = permutation(initChaine);
-        if(null != result && !result.isEmpty()) {
-            for(String str : result) {
+        if (null != result && !result.isEmpty()) {
+            for (String str : result) {
                 ProposalResult proposalResult = apiClient.test(str);
-                if(null != proposalResult) {
-                   if(proposalResult.getGood() == str.length()) {
-                       chResult = str;
-                       break;
-                   }
+                if (null != proposalResult) {
+                    if (proposalResult.getGood() == str.length()) {
+                        chResult = str;
+                        break;
+                    }
                 }
             }
         }
         return chResult;
     }
-    
-    
+
     private String getNumberNotUsed(String ch) {
         String result = "";
         for (int i = 0; i <= 9; i++) {
@@ -138,7 +143,6 @@ public class App {
         }
     }
 
-    
     private static String invertChar(String chaine, int p1, int p2) {
         char arr[] = chaine.toCharArray();
         char tmp = arr[p1];
@@ -146,6 +150,7 @@ public class App {
         arr[p2] = tmp;
         return new String(arr);
     }
+
     private int getRandomNumberInRange(int min, int max) {
         if (min >= max) {
             throw new IllegalArgumentException("max must be greater than min");
@@ -154,14 +159,14 @@ public class App {
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
     }
-    
+
     private boolean isResultOk(String finalResult, int length) {
-        if(finalResult.length() == length && isNumber(finalResult)) {
+        if (finalResult.length() == length && isNumber(finalResult)) {
             return true;
         }
         return false;
     }
-    
+
     public boolean isNumber(String s) {
         try {
             if (s.equals("")) {
