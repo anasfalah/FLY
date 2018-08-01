@@ -79,8 +79,8 @@ public class SimpleElementsFinder {
     public static void main(String[] args) throws Exception {
         ApiClient client = new ApiClient();
         int size = client.start();
-        System.out.println(5);
-//        int size = 5;
+//      int size = 5;
+        System.out.println("size : " + size);
         SimpleElementsFinder sef = new SimpleElementsFinder();
         Date ref = new Date();
         String s = sef.find(client, size);
