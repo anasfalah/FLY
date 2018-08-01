@@ -29,8 +29,13 @@ public class ApiClient {
     }
 
     public ClientResponse execute(String service) throws Exception {
+        return execute(service, null);
+    }
+
+    public ClientResponse execute(String service, String result) throws Exception {
         Request request = new Request();
         request.setToken(TOKEN);
+        request.setResult(result);
         return client.resource("http://" + IP + ":" + PORT + service)
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .accept(MediaType.APPLICATION_JSON_TYPE)
@@ -56,7 +61,7 @@ public class ApiClient {
     public ProposalResult test(String proposal) throws Exception {
         ClientResponse response = null;
         try {
-            response = execute(TEST_RESOURCE);
+            response = execute(TEST_RESOURCE, proposal);
             ProposalResult result = response.getEntity(ProposalResult.class);
             if (result.getError() != null && !result.getError().equals("")) {
                 throw new Exception(result.getError());

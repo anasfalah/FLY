@@ -92,7 +92,7 @@ public class ApiClientTest {
         Mockito.when(res.getEntity(ProposalResult.class)).thenReturn(ret);
 
         ApiClient client = Mockito.spy(new ApiClient());
-        Mockito.when(client.execute(Mockito.anyString())).thenReturn(res);
+        Mockito.when(client.execute(Mockito.anyString(), Mockito.anyString())).thenReturn(res);
 
         ProposalResult newRes = client.test(UUID.randomUUID().toString());
         assertTrue(ret.getGood() == newRes.getGood());
