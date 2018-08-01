@@ -5,16 +5,20 @@
  */
 package com.flyteam.mastermind.client;
 
-import com.sun.jersey.api.client.ClientResponse;
-import java.util.Random;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.UUID;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.mockito.Mockito;
+
+import com.sun.jersey.api.client.ClientResponse;
 
 /**
  *

@@ -5,11 +5,11 @@
  */
 package com.flyteam.mastermind;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.flyteam.mastermind.client.ApiClient;
 import com.flyteam.mastermind.client.ProposalResult;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  *
@@ -74,17 +74,5 @@ public class SimpleElementsFinder {
             }
         }
         return res;
-    }
-    
-    public static void main(String[] args) throws Exception {
-        ApiClient client = new ApiClient();
-        int size = client.start();
-//      int size = 5;
-        System.out.println("size : " + size);
-        SimpleElementsFinder sef = new SimpleElementsFinder();
-        Date ref = new Date();
-        String s = sef.find(client, size);
-        System.out.println(new Date().getTime() - ref.getTime());
-        System.out.println(s);
     }
 }
