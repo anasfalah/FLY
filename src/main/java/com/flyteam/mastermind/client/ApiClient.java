@@ -26,7 +26,6 @@ public class ApiClient {
 
     public ApiClient() {
         client = client.create();
-//        client.addFilter(new LoggingFilter());
     }
 
     public ClientResponse execute(String service) throws Exception {
@@ -38,7 +37,7 @@ public class ApiClient {
                 .post(ClientResponse.class, request);
     }
 
-    public Integer start() throws Exception {
+    public int start() throws Exception {
         ClientResponse response = null;
         try {
             response = execute(START_RESOURCE);
