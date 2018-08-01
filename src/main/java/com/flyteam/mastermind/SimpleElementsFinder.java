@@ -37,9 +37,15 @@ public class SimpleElementsFinder {
                 throw new Error("Problem while checking element " + this.element, e);
             }
         }
-
     }
-
+    
+    /**
+     * 
+     * @param client
+     * @param size
+     * @return
+     * @throws Exception
+     */
     public String find(ApiClient client, int size) throws Exception {
         List<ElementChecker> runnables = new ArrayList<>();
         List<Thread> threads = new ArrayList<>();
@@ -59,7 +65,6 @@ public class SimpleElementsFinder {
                 }
             }
         } while (isThreadRunning);
-
         String res = "";
         for (ElementChecker runnable : runnables) {
             for (int k = 0; k < runnable.found; k++) {
