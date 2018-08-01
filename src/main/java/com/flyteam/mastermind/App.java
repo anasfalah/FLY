@@ -64,7 +64,7 @@ public class App {
                                   finalResult = replaceCharacter(b, finalResult, position);
                                   position++;
                               }else if(wrongPlaced > firstWp) {
-                                  
+                                  chInitiale = chReplaced;
                               }else if(wrongPlaced < firstWp) {
                                   
                               }
