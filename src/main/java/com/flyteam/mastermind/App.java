@@ -7,7 +7,6 @@ package com.flyteam.mastermind;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Random;
 import java.util.Set;
 
 import com.flyteam.mastermind.client.ApiClient;
@@ -67,7 +66,7 @@ public class App {
         String finalResult = "";
         int firstOk = 0;
         ApiClient client = new ApiClient();
-        int size = 8;//client.start(); 53375480
+        int size = client.start(); //53375480
         SimpleElementsFinder sef = new SimpleElementsFinder();
         String chInitiale = sef.find(client, size);
         ProposalResult proposalResult = apiClient.test(chInitiale);
@@ -81,20 +80,15 @@ public class App {
                 System.out.println("1" + finalResult);
             } else {
                 for (int position = 0; position < size; position++) {
-                    System.out.println("OK Start " + firstOk);
                     for (int i = position + 1; i < size; i++) {
                         nb++;
                         String chReplaced = invertChar(chInitiale, position, i);
-                        System.out.println(chInitiale + " replaced by " + chReplaced);
                         proposalResult = apiClient.test(chReplaced);
-                        System.out.println("good " + proposalResult.getGood());
                         if (proposalResult.getGood() == size) {
-                            System.out.println(chReplaced);
                             finalResult = chReplaced;
                             position = size;
                             i = size;
                         } else if (proposalResult.getGood() > firstOk) {
-                            System.out.println("Replacing : " + chInitiale);
                             chInitiale = chReplaced;
                             firstOk = proposalResult.getGood();
                             i = size;
@@ -103,44 +97,7 @@ public class App {
                 }
             }
         }
-        System.out.println(nb);
         System.out.println("final; " + finalResult);
-    }
-
-    public String test(String initChaine, ApiClient apiClient)
-            throws Exception {
-        String chResult = "";
-        Set<String> result = permutation(initChaine);
-        if (null != result && !result.isEmpty()) {
-            for (String str : result) {
-                ProposalResult proposalResult = apiClient.test(str);
-                if (null != proposalResult) {
-                    if (proposalResult.getGood() == str.length()) {
-                        chResult = str;
-                        break;
-                    }
-                }
-            }
-        }
-        return chResult;
-    }
-
-    private String getNumberNotUsed(String ch) {
-        String result = "";
-        for (int i = 0; i <= 9; i++) {
-            if (!ch.contains(String.valueOf(i))) {
-                result += i;
-            }
-        }
-        return result;
-    }
-
-    private static String replaceCharacter(Character c, String chaine, int position) {
-        if (position == 0) {
-            return c + chaine.substring(position + 1, chaine.length());
-        } else {
-            return chaine.substring(0, position) + c + chaine.substring(position + 1, chaine.length());
-        }
     }
 
     private static String invertChar(String chaine, int p1, int p2) {
@@ -151,31 +108,6 @@ public class App {
         return new String(arr);
     }
 
-    private int getRandomNumberInRange(int min, int max) {
-        if (min >= max) {
-            throw new IllegalArgumentException("max must be greater than min");
-        }
 
-        Random r = new Random();
-        return r.nextInt((max - min) + 1) + min;
-    }
-
-    private boolean isResultOk(String finalResult, int length) {
-        if (finalResult.length() == length && isNumber(finalResult)) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isNumber(String s) {
-        try {
-            if (s.equals("")) {
-                return false;
-            }
-            Integer.parseInt(s);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
+   
 }
