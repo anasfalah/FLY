@@ -54,9 +54,8 @@ public class SimpleElementsFinder {
         do {
             isThreadRunning = false;
             for (Thread t : threads) {
-                isThreadRunning = t.isAlive();
-                if (isThreadRunning) {
-                    break;
+                if (!isThreadRunning) {
+                    isThreadRunning = t.isAlive();
                 }
             }
         } while (isThreadRunning);
