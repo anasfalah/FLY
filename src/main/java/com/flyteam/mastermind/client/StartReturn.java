@@ -7,6 +7,7 @@ package com.flyteam.mastermind.client;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -19,7 +20,8 @@ public class StartReturn {
 
     private String name;
     private int size;
-    private int quizz_id;
+    @XmlElement(name = "quizz_id")
+    private int quizzId;
 
     public StartReturn() {
     }
@@ -40,12 +42,12 @@ public class StartReturn {
         this.size = size;
     }
 
-    public int getQuizz_id() {
-        return quizz_id;
+    public int getQuizzId() {
+        return quizzId;
     }
 
-    public void setQuizz_id(int quizz_id) {
-        this.quizz_id = quizz_id;
+    public void setQuizzId(int quizzId) {
+        this.quizzId = quizzId;
     }
 
 }
