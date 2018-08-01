@@ -7,6 +7,8 @@ package com.flyteam.mastermind.client;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
+import java.io.InputStream;
+import java.util.Properties;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -19,13 +21,17 @@ public class ApiClient {
     private static final String START_RESOURCE = "/api/start";
     private static final String TEST_RESOURCE = "/api/test";
 
-    private static final String IP = "172.16.37.129";
-    private static final String PORT = "80";
+    private final String ip;
+    private final String port;
 
-    private Client client;
+    private Client client = Client.create();
 
-    public ApiClient() {
-        client = client.create();
+    public ApiClient() throws Exception {
+        InputStream is = getClass().getResourceAsStream("/application.properties");
+        Properties props = new Properties();
+        props.load(is);
+        this.ip = props.getProperty("api.ip");
+        this.port = props.getProperty("api.port");
     }
 
     public ClientResponse execute(String service) throws Exception {
@@ -36,7 +42,7 @@ public class ApiClient {
         Request request = new Request();
         request.setToken(TOKEN);
         request.setResult(result);
-        return client.resource("http://" + IP + ":" + PORT + service)
+        return client.resource("http://" + ip + ":" + port + service)
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .accept(MediaType.APPLICATION_JSON_TYPE)
                 .post(ClientResponse.class, request);
