@@ -19,8 +19,10 @@ public class ApiClient {
     private static final String START_RESOURCE = "/api/start";
     private static final String TEST_RESOURCE = "/api/test";
 
+    private static final String IP = "172.16.37.129";
+    private static final String PORT = "8080";
+
     private Client client;
-    private static final String ip = "http://172.16.37.129";
 
     public ApiClient() {
         client = client.create();
@@ -31,7 +33,7 @@ public class ApiClient {
         try {
             Request request = new Request();
             request.setToken(TOKEN);
-            response = client.resource("http://" + ip + ":"  + START_RESOURCE)
+            response = client.resource("http://" + IP + ":"  + PORT + START_RESOURCE)
                     .accept(MediaType.APPLICATION_JSON_TYPE)
                     .post(ClientResponse.class, request);
             return response.getEntity(StartReturn.class).getSize();
@@ -48,7 +50,7 @@ public class ApiClient {
             Request request = new Request();
             request.setToken(TOKEN);
             request.setResult(proposal);
-            response = client.resource("http://" + ip + ":" + TEST_RESOURCE)
+            response = client.resource("http://" + IP + ":" + PORT + TEST_RESOURCE)
                     .accept(MediaType.APPLICATION_JSON_TYPE)
                     .post(ClientResponse.class, request);
             return response.getEntity(ProposalResult.class);

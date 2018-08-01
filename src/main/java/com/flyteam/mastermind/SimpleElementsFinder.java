@@ -8,6 +8,7 @@ package com.flyteam.mastermind;
 import com.flyteam.mastermind.client.ApiClient;
 import com.flyteam.mastermind.client.ProposalResult;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,7 +38,7 @@ public class SimpleElementsFinder {
                     test.append(element);
                 }
                 ProposalResult apiResult = client.test(test.toString());
-                this.found = apiResult.getGood() + apiResult.getWrong_place();
+                this.found = apiResult.getGood() + apiResult.getWrongPlace();
             } catch (Exception e) {
                 throw new Error("Problem while checking element " + this.element, e);
             }
@@ -73,5 +74,14 @@ public class SimpleElementsFinder {
             }
         }
         return res.toString();
+    }
+    
+    public static void main(String[] args) throws Exception {
+        ApiClient client = new ApiClient();
+        SimpleElementsFinder sef = new SimpleElementsFinder();
+        int size = 5;
+        Date ref = new Date();
+        System.out.println(sef.find(client, size));
+        System.out.println(new Date().getTime() - ref.getTime());
     }
 }

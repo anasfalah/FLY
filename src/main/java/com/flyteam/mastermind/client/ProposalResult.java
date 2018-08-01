@@ -1,23 +1,31 @@
 package com.flyteam.mastermind.client;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
  * @author jtapiat
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ProposalResult {
 
-    private int wrong_place;
+    @XmlElement(name = "wrong_place")
+    private int wrongPlace;
     private int good;
 
     public ProposalResult() {
     }
 
-    public int getWrong_place() {
-        return wrong_place;
+    public int getWrongPlace() {
+        return wrongPlace;
     }
 
-    public void setWrong_place(int wrong_place) {
-        this.wrong_place = wrong_place;
+    public void setWrongPlace(int wrongPlace) {
+        this.wrongPlace = wrongPlace;
     }
 
     public int getGood() {
