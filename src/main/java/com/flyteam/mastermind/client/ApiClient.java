@@ -29,15 +29,19 @@ public class ApiClient {
 //        client.addFilter(new LoggingFilter());
     }
 
+    public ClientResponse execute(String service) throws Exception {
+        Request request = new Request();
+        request.setToken(TOKEN);
+        return client.resource("http://" + IP + ":" + PORT + service)
+                .type(MediaType.APPLICATION_JSON_TYPE)
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .post(ClientResponse.class, request);
+    }
+
     public Integer start() throws Exception {
         ClientResponse response = null;
         try {
-            Request request = new Request();
-            request.setToken(TOKEN);
-            response = client.resource("http://" + IP + ":"  + PORT + START_RESOURCE)
-                    .type(MediaType.APPLICATION_JSON_TYPE)
-                    .accept(MediaType.APPLICATION_JSON_TYPE)
-                    .post(ClientResponse.class, request);
+            response = execute(START_RESOURCE);
             StartReturn result = response.getEntity(StartReturn.class);
             if (result.getError() != null && !result.getError().equals("")) {
                 throw new Exception(result.getError());
@@ -53,13 +57,7 @@ public class ApiClient {
     public ProposalResult test(String proposal) throws Exception {
         ClientResponse response = null;
         try {
-            Request request = new Request();
-            request.setToken(TOKEN);
-            request.setResult(proposal);
-            response = client.resource("http://" + IP + ":" + PORT + TEST_RESOURCE)
-                    .type(MediaType.APPLICATION_JSON_TYPE)
-                    .accept(MediaType.APPLICATION_JSON_TYPE)
-                    .post(ClientResponse.class, request);
+            response = execute(TEST_RESOURCE);
             ProposalResult result = response.getEntity(ProposalResult.class);
             if (result.getError() != null && !result.getError().equals("")) {
                 throw new Exception(result.getError());
