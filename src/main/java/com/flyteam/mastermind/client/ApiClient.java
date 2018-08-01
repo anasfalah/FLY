@@ -34,27 +34,31 @@ public class ApiClient {
         this.port = props.getProperty("api.port");
     }
 
-    public ClientResponse execute(String service) throws Exception {
+    public ClientResponse execute(String service) throws ApiFailureException {
         return execute(service, null);
     }
 
-    public ClientResponse execute(String service, String result) throws Exception {
+    public ClientResponse execute(String service, String result) throws ApiFailureException {
         Request request = new Request();
         request.setToken(TOKEN);
         request.setResult(result);
-        return client.resource("http://" + ip + ":" + port + service)
-                .type(MediaType.APPLICATION_JSON_TYPE)
-                .accept(MediaType.APPLICATION_JSON_TYPE)
-                .post(ClientResponse.class, request);
+        try {
+            return client.resource("http://" + ip + ":" + port + service)
+                    .type(MediaType.APPLICATION_JSON_TYPE)
+                    .accept(MediaType.APPLICATION_JSON_TYPE)
+                    .post(ClientResponse.class, request);
+        } catch (Exception e) {
+            throw new ApiFailureException(e);
+        }
     }
 
-    public int start() throws Exception {
+    public int start() throws ApiFailureException {
         ClientResponse response = null;
         try {
             response = execute(START_RESOURCE);
             StartReturn result = response.getEntity(StartReturn.class);
             if (result.getError() != null && !result.getError().equals("")) {
-                throw new Exception(result.getError());
+                throw new ApiFailureException(result.getError());
             }
             return result.getSize();
         } finally {
@@ -64,13 +68,13 @@ public class ApiClient {
         }
     }
 
-    public ProposalResult test(String proposal) throws Exception {
+    public ProposalResult test(String proposal) throws ApiFailureException {
         ClientResponse response = null;
         try {
             response = execute(TEST_RESOURCE, proposal);
             ProposalResult result = response.getEntity(ProposalResult.class);
             if (result.getError() != null && !result.getError().equals("")) {
-                throw new Exception(result.getError());
+                throw new ApiFailureException(result.getError());
             }
             return result;
         } finally {
