@@ -16,6 +16,8 @@ public class ProposalResult {
     @XmlElement(name = "wrong_place")
     private int wrongPlace;
     private int good;
+    @XmlElement(name = "Error")
+    private String error;
 
     public ProposalResult() {
     }
@@ -34,5 +36,13 @@ public class ProposalResult {
 
     public void setGood(int good) {
         this.good = good;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }

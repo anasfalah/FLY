@@ -33,12 +33,12 @@ public class SimpleElementsFinder {
         @Override
         public void run() {
             try {
-                StringBuilder test = new StringBuilder();
+                String test = "";
                 for (int j = 0; j < size; j++) {
-                    test.append(element);
+                    test += element;
                 }
-                ProposalResult apiResult = client.test(test.toString());
-                this.found = apiResult.getGood() + apiResult.getWrongPlace();
+                ProposalResult apiResult = client.test(test);
+                this.found = apiResult.getGood();
             } catch (Exception e) {
                 throw new Error("Problem while checking element " + this.element, e);
             }
@@ -60,28 +60,31 @@ public class SimpleElementsFinder {
         do {
             isThreadRunning = false;
             for (Thread t : threads) {
-                isThreadRunning = !t.isInterrupted();
+                isThreadRunning = t.isAlive();
                 if (isThreadRunning) {
                     break;
                 }
             }
         } while (isThreadRunning);
 
-        StringBuilder res = new StringBuilder();
+        String res = "";
         for (ElementChecker runnable : runnables) {
             for (int k = 0; k < runnable.found; k++) {
-                res.append(runnable.element);
+                res += runnable.element;
             }
         }
-        return res.toString();
+        return res;
     }
     
     public static void main(String[] args) throws Exception {
         ApiClient client = new ApiClient();
+        int size = client.start();
+        System.out.println(5);
+//        int size = 5;
         SimpleElementsFinder sef = new SimpleElementsFinder();
-        int size = 5;
         Date ref = new Date();
-        System.out.println(sef.find(client, size));
+        String s = sef.find(client, size);
         System.out.println(new Date().getTime() - ref.getTime());
+        System.out.println(s);
     }
 }

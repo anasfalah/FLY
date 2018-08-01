@@ -22,6 +22,8 @@ public class StartReturn {
     private int size;
     @XmlElement(name = "quizz_id")
     private int quizzId;
+    @XmlElement(name = "Error")
+    private String error;
 
     public StartReturn() {
     }
@@ -48,6 +50,14 @@ public class StartReturn {
 
     public void setQuizzId(int quizzId) {
         this.quizzId = quizzId;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 
 }
