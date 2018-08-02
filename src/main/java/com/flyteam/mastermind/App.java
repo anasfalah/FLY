@@ -10,19 +10,17 @@ import com.flyteam.mastermind.client.ProposalResult;
 public class App {
 
     /**
-     *
+     * DESCRIPTION : Methode main to execute
      * @param args
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
         ApiClient apiClient = new ApiClient();
-        String finalResult = "";
         ApiClient client = new ApiClient();
-        int size = client.start(); //53375480
+        int size = client.start();
         SimpleElementsFinder sef = new SimpleElementsFinder();
         String chInitiale = sef.find(client, size);
         ProposalResult proposalResult = apiClient.test(chInitiale);
-        // archived first result
         int firstOk = proposalResult.getGood();
         while (proposalResult.getGood() != size) {
             for (int position = 0; position < size; position++) {
@@ -30,7 +28,6 @@ public class App {
                     String chReplaced = invertChar(chInitiale, position, i);
                     proposalResult = apiClient.test(chReplaced);
                     if (proposalResult.getGood() == size) {
-                        finalResult = chReplaced;
                         position = size;
                         i = size;
                     } else if (proposalResult.getGood() > firstOk) {
@@ -41,9 +38,15 @@ public class App {
                 }
             }
         }
-        System.out.println(finalResult);
     }
 
+    /**
+     * DESCRIPTION : invert position between two caraters
+     * @param chaine
+     * @param p1
+     * @param p2
+     * @return
+     */
     private static String invertChar(String chaine, int p1, int p2) {
         char arr[] = chaine.toCharArray();
         char tmp = arr[p1];
