@@ -71,7 +71,7 @@ public class ApiClientTest {
         Mockito.doReturn(ret).when(res).getEntity(StartReturn.class);
 
         ApiClient client = Mockito.spy(ApiClient.class);
-        Mockito.doReturn(res).when(client).execute(ApiClient.START_RESOURCE);
+        Mockito.doReturn(res).when(client).execute(Mockito.anyString());
 
         assertTrue(ret.getSize() == client.start());
 
@@ -99,7 +99,7 @@ public class ApiClientTest {
         Mockito.doReturn(ret).when(res).getEntity(ProposalResult.class);
 
         ApiClient client = Mockito.spy(ApiClient.class);
-        Mockito.doReturn(res).when(client).execute(ApiClient.TEST_RESOURCE, Mockito.anyString());
+        Mockito.doReturn(res).when(client).execute(Mockito.anyString(), Mockito.anyString());
 
         ProposalResult newRes = client.test(UUID.randomUUID().toString());
         assertTrue(ret.getGood() == newRes.getGood());
