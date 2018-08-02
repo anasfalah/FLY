@@ -26,7 +26,7 @@ public class ApiClient {
     private final String ip;
     private final String port;
 
-    private Client client = Client.create();
+    private final Client client = Client.create();
 
     /**
      * 
