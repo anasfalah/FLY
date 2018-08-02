@@ -43,11 +43,11 @@ public class App {
                 proposalResult = apiClient.test(chReplaced);
                 if (proposalResult.getGood() == size) {
                     position = size;
-                    i = size;
+                    break;
                 } else if (proposalResult.getGood() > firstOk) {
                     chInitiale = chReplaced;
                     firstOk = proposalResult.getGood();
-                    i = size;
+                    break;
                 }
             }
         }
