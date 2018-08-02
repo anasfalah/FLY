@@ -25,23 +25,18 @@ public class App {
         // archived first result
         int firstOk = proposalResult.getGood();
         while (proposalResult.getGood() != size) {
-            if (proposalResult.getGood() == size) {
-                // case when all is OK
-                finalResult = chInitiale;
-            } else {
-                for (int position = 0; position < size; position++) {
-                    for (int i = position + 1; i < size; i++) {
-                        String chReplaced = invertChar(chInitiale, position, i);
-                        proposalResult = apiClient.test(chReplaced);
-                        if (proposalResult.getGood() == size) {
-                            finalResult = chReplaced;
-                            position = size;
-                            i = size;
-                        } else if (proposalResult.getGood() > firstOk) {
-                            chInitiale = chReplaced;
-                            firstOk = proposalResult.getGood();
-                            i = size;
-                        }
+            for (int position = 0; position < size; position++) {
+                for (int i = position + 1; i < size; i++) {
+                    String chReplaced = invertChar(chInitiale, position, i);
+                    proposalResult = apiClient.test(chReplaced);
+                    if (proposalResult.getGood() == size) {
+                        finalResult = chReplaced;
+                        position = size;
+                        i = size;
+                    } else if (proposalResult.getGood() > firstOk) {
+                        chInitiale = chReplaced;
+                        firstOk = proposalResult.getGood();
+                        i = size;
                     }
                 }
             }

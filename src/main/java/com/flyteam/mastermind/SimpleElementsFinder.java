@@ -3,6 +3,7 @@ package com.flyteam.mastermind;
 import com.flyteam.mastermind.client.ApiClient;
 import com.flyteam.mastermind.client.ProposalResult;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -10,6 +11,8 @@ import java.util.List;
  * @author jtapiat
  */
 public class SimpleElementsFinder {
+
+    protected static final char[] ELEMENTS = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
     public static class ElementChecker implements Runnable {
 
@@ -38,9 +41,17 @@ public class SimpleElementsFinder {
             }
         }
     }
-    
+
+    private void launchThread(List<ElementChecker> checkers, List<Thread> threads, char character, ApiClient client, int size) {
+        ElementChecker r = new ElementChecker(character, client, size);
+        checkers.add(r);
+        Thread t = new Thread(r);
+        threads.add(t);
+        t.start();
+    }
+
     /**
-     * 
+     *
      * @param client
      * @param size
      * @return
@@ -49,22 +60,18 @@ public class SimpleElementsFinder {
     public String find(ApiClient client, int size) throws Exception {
         List<ElementChecker> runnables = new ArrayList<>();
         List<Thread> threads = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            ElementChecker r = new ElementChecker(Character.forDigit(i, 10), client, size);
-            runnables.add(r);
-            Thread t = new Thread(r);
-            threads.add(t);
-            t.start();
+        for (char character : ELEMENTS) {
+            launchThread(runnables, threads, character, client, size);
         }
-        Boolean isThreadRunning;
         do {
-            isThreadRunning = false;
-            for (Thread t : threads) {
-                if (!isThreadRunning) {
-                    isThreadRunning = t.isAlive();
+            for (Iterator<Thread> it = threads.iterator(); it.hasNext();) {
+                Thread t = it.next();
+                if (!t.isAlive()) {
+                    it.remove();
                 }
             }
-        } while (isThreadRunning);
+        } while (!threads.isEmpty());
+
         String res = "";
         for (ElementChecker runnable : runnables) {
             for (int k = 0; k < runnable.found; k++) {

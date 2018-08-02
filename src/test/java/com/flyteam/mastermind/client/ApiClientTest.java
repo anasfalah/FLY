@@ -5,20 +5,18 @@
  */
 package com.flyteam.mastermind.client;
 
+import com.flyteam.mastermind.tool.TestTool;
+import com.sun.jersey.api.client.ClientResponse;
+import java.util.UUID;
+import org.junit.After;
+import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
-import java.util.UUID;
-
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import com.sun.jersey.api.client.ClientResponse;
 
 /**
  *
@@ -56,21 +54,24 @@ public class ApiClientTest {
 //        assertEquals(res, client.execute(UUID.randomUUID().toString()));
 //        
 //    }
+    
     /**
      * Test of start method, of class ApiClient.
+     * @throws java.lang.Exception
      */
     @Test
     public void testStart() throws Exception {
+        System.out.println("start");
         StartReturn ret = new StartReturn();
         ret.setName(UUID.randomUUID().toString());
-        ret.setSize(Double.valueOf(Math.random()).intValue());
-        ret.setQuizzId(Double.valueOf(Math.random()).intValue());
+        ret.setSize(Double.valueOf(Math.random() * 10).intValue());
+        ret.setQuizzId(Double.valueOf(Math.random() * 10).intValue());
 
-        ClientResponse res = Mockito.mock(ClientResponse.class);
-        Mockito.when(res.getEntity(StartReturn.class)).thenReturn(ret);
+        ClientResponse res = TestTool.getClientResponseMock();
+        Mockito.doReturn(ret).when(res).getEntity(StartReturn.class);
 
         ApiClient client = Mockito.spy(ApiClient.class);
-        Mockito.when(client.execute(Mockito.anyString())).thenReturn(res);
+        Mockito.doReturn(res).when(client).execute(Mockito.anyString());
 
         assertTrue(ret.getSize() == client.start());
 
@@ -85,18 +86,20 @@ public class ApiClientTest {
 
     /**
      * Test of test method, of class ApiClient.
+     * @throws java.lang.Exception
      */
     @Test
     public void testTest() throws Exception {
+        System.out.println("test");
         ProposalResult ret = new ProposalResult();
-        ret.setGood(Double.valueOf(Math.random()).intValue());
-        ret.setWrongPlace(Double.valueOf(Math.random()).intValue());
+        ret.setGood(Double.valueOf(Math.random() * 10).intValue());
+        ret.setWrongPlace(Double.valueOf(Math.random() * 10).intValue());
 
-        ClientResponse res = Mockito.mock(ClientResponse.class);
-        Mockito.when(res.getEntity(ProposalResult.class)).thenReturn(ret);
+        ClientResponse res = TestTool.getClientResponseMock();
+        Mockito.doReturn(ret).when(res).getEntity(ProposalResult.class);
 
         ApiClient client = Mockito.spy(ApiClient.class);
-        Mockito.when(client.execute(Mockito.anyString(), Mockito.anyString())).thenReturn(res);
+        Mockito.doReturn(res).when(client).execute(Mockito.anyString(), Mockito.anyString());
 
         ProposalResult newRes = client.test(UUID.randomUUID().toString());
         assertTrue(ret.getGood() == newRes.getGood());

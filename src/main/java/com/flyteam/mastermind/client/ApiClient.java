@@ -25,6 +25,13 @@ public class ApiClient {
     private final String port;
 
     private Client client = Client.create();
+    
+    protected synchronized Client getClient() {
+        if (client == null) {
+            client = Client.create();
+        }
+        return client;
+    }
 
     public ApiClient() throws Exception {
         InputStream is = getClass().getResourceAsStream("/application.properties");
@@ -43,7 +50,7 @@ public class ApiClient {
         request.setToken(TOKEN);
         request.setResult(result);
         try {
-            return client.resource("http://" + ip + ":" + port + service)
+            return getClient().resource("http://" + ip + ":" + port + service)
                     .type(MediaType.APPLICATION_JSON_TYPE)
                     .accept(MediaType.APPLICATION_JSON_TYPE)
                     .post(ClientResponse.class, request);
