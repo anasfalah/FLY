@@ -13,7 +13,8 @@ import java.util.List;
  */
 public class SimpleElementsFinder {
 
-    protected static final char[] ELEMENTS = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    protected static final char[] ELEMENTS = new char[]{'0', '1', '2', '3', '4',
+        '5', '6', '7', '8', '9'};
 
     public static class ElementChecker implements Runnable {
 
@@ -44,9 +45,9 @@ public class SimpleElementsFinder {
     }
 
     private void launchThread(List<ElementChecker> checkers, List<Thread> threads, char character, ApiClient client, int size) {
-        ElementChecker r = new ElementChecker(character, client, size);
-        checkers.add(r);
-        Thread t = new Thread(r);
+        ElementChecker runnable = new ElementChecker(character, client, size);
+        checkers.add(runnable);
+        Thread t = new Thread(runnable);
         threads.add(t);
         t.start();
     }
