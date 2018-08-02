@@ -9,6 +9,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import javax.ws.rs.core.MediaType;
@@ -30,9 +31,9 @@ public class ApiClient {
 
     /**
      * 
-     * @throws Exception
+     * @throws java.io.IOException
      */
-    public ApiClient() throws Exception {
+    public ApiClient() throws IOException {
         InputStream is = getClass().getResourceAsStream("/application.properties");
         Properties props = new Properties();
         props.load(is);

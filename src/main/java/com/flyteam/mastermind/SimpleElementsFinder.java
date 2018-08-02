@@ -1,6 +1,7 @@
 package com.flyteam.mastermind;
 
 import com.flyteam.mastermind.client.ApiClient;
+import com.flyteam.mastermind.client.ApiFailureException;
 import com.flyteam.mastermind.client.ProposalResult;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -54,10 +55,10 @@ public class SimpleElementsFinder {
      *
      * @param client
      * @param size
-     * @return
-     * @throws Exception
+     * @return A string with containing all elements in the right number but not the right position
+     * @throws com.flyteam.mastermind.client.ApiFailureException
      */
-    public String find(ApiClient client, int size) throws Exception {
+    public String find(ApiClient client, int size) throws ApiFailureException {
         List<ElementChecker> runnables = new ArrayList<>();
         List<Thread> threads = new ArrayList<>();
         for (char character : ELEMENTS) {
