@@ -14,6 +14,7 @@ public class App {
     private int size;
     private int firstOk;
     private String chInitiale;
+    private ProposalResult proposalResult;
 
     /**
      * Constructor
@@ -33,20 +34,21 @@ public class App {
         size = apiClient.start();
         SimpleElementsFinder sef = new SimpleElementsFinder();
         chInitiale = sef.find(apiClient, size);
-        ProposalResult proposalResult = apiClient.test(chInitiale);
+        proposalResult = apiClient.test(chInitiale);
         firstOk = proposalResult.getGood();
         while (proposalResult.getGood() != size) {
-            testPosition(proposalResult, apiClient);
+            testPosition(apiClient);
         }
         return chInitiale;
     }
 
-    protected void testPosition(ProposalResult proposalResult, ApiClient apiClient) throws ApiFailureException {
+    protected void testPosition(ApiClient apiClient) throws ApiFailureException {
         for (int position = 0; position < size; position++) {
             for (int i = position + 1; i < size; i++) {
                 String chReplaced = invertChar(chInitiale, position, i);
                 proposalResult = apiClient.test(chReplaced);
                 if (proposalResult.getGood() == size) {
+                    chInitiale = chReplaced;
                     position = size;
                     break;
                 } else if (proposalResult.getGood() > firstOk) {
@@ -65,11 +67,11 @@ public class App {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        new App().search();
+        System.out.println(new App().search());
     }
 
     /**
-     * DESCRIPTION : invert position between two caraters
+     * DESCRIPTION : invert position between two caracters
      *
      * @param chaine
      * @param p1

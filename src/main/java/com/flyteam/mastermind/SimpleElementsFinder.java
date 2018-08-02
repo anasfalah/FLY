@@ -13,8 +13,21 @@ import java.util.List;
  */
 public class SimpleElementsFinder {
 
-    protected static final char[] ELEMENTS = new char[]{'0', '1', '2', '3', '4',
-        '5', '6', '7', '8', '9'};
+    protected static final List<Character> ELEMENTS = getCharList();
+
+    private static List<Character> getCharList() {
+        List<Character> chars = new ArrayList<>();
+        for (int i = 48; i <= 57; i++) {
+            chars.add((char) i);
+        }
+        for (int i = 65; i <= 90; i++) {
+            chars.add((char) i);
+        }
+        for (int i = 97; i <= 122; i++) {
+            chars.add((char) i);
+        }
+        return chars;
+    }
 
     public static class ElementChecker implements Runnable {
 
