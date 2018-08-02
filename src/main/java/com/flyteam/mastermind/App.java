@@ -14,6 +14,9 @@ public class App {
     private int firstOk;
     private String chInitiale;
 
+    /**
+     * Constructor
+     */
     public App() {
     }
 
@@ -36,6 +39,12 @@ public class App {
         return chInitiale;
     }
 
+    /**
+     * DESCRIPTION : Test for correct position 
+     * @param proposalResult
+     * @param apiClient
+     * @throws ApiFailureException
+     */
     protected void testPosition(ProposalResult proposalResult, ApiClient apiClient) throws ApiFailureException {
         for (int position = 0; position < size; position++) {
             for (int i = position + 1; i < size; i++) {
