@@ -51,19 +51,7 @@ public class SimpleElementsFinder {
         t.start();
     }
 
-    /**
-     *
-     * @param client
-     * @param size
-     * @return A string with containing all elements in the right number but not the right position
-     * @throws com.flyteam.mastermind.client.ApiFailureException
-     */
-    public String find(ApiClient client, int size) throws ApiFailureException {
-        List<ElementChecker> runnables = new ArrayList<>();
-        List<Thread> threads = new ArrayList<>();
-        for (char character : ELEMENTS) {
-            launchThread(runnables, threads, character, client, size);
-        }
+    private void waitForThreads(List<Thread> threads) {
         do {
             for (Iterator<Thread> it = threads.iterator(); it.hasNext();) {
                 Thread t = it.next();
@@ -72,7 +60,9 @@ public class SimpleElementsFinder {
                 }
             }
         } while (!threads.isEmpty());
+    }
 
+    private String generateString(List<ElementChecker> runnables) {
         String res = "";
         for (ElementChecker runnable : runnables) {
             for (int k = 0; k < runnable.found; k++) {
@@ -80,5 +70,24 @@ public class SimpleElementsFinder {
             }
         }
         return res;
+    }
+
+    /**
+     *
+     * @param client
+     * @param size
+     * @return A string with containing all elements in the right number but not
+     * the right position
+     * @throws com.flyteam.mastermind.client.ApiFailureException
+     */
+    public String find(ApiClient client, int size) throws ApiFailureException {
+        List<ElementChecker> runnables = new ArrayList<>();
+        List<Thread> threads = new ArrayList<>();
+        for (char character : ELEMENTS) {
+            launchThread(runnables, threads, character, client, size);
+        }
+
+        waitForThreads(threads);
+        return generateString(runnables);
     }
 }
