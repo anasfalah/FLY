@@ -3,6 +3,7 @@ package com.flyteam.mastermind;
 import com.flyteam.mastermind.client.ApiClient;
 import com.flyteam.mastermind.client.ApiFailureException;
 import com.flyteam.mastermind.client.ProposalResult;
+import java.io.IOException;
 
 /**
  *
@@ -24,9 +25,10 @@ public class App {
      * Launches a string search
      *
      * @return The string corresponding to the search
-     * @throws Exception
+     * @throws com.flyteam.mastermind.client.ApiFailureException
+     * @throws java.io.IOException
      */
-    public String search() throws Exception {
+    public String search() throws ApiFailureException, IOException {
         ApiClient apiClient = new ApiClient();
         size = apiClient.start();
         SimpleElementsFinder sef = new SimpleElementsFinder();
