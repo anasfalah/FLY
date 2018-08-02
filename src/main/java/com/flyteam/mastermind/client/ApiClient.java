@@ -18,8 +18,8 @@ import javax.ws.rs.core.MediaType;
 public class ApiClient {
 
     private static final String TOKEN = "tokenfly";
-    private static final String START_RESOURCE = "/api/start";
-    private static final String TEST_RESOURCE = "/api/test";
+    protected static final String START_RESOURCE = "/api/start";
+    protected static final String TEST_RESOURCE = "/api/test";
 
     private final String ip;
     private final String port;
