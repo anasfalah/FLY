@@ -6,7 +6,9 @@
 package com.flyteam.mastermind.client;
 
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import java.io.InputStream;
 import java.util.Properties;
 import javax.ws.rs.core.MediaType;
@@ -33,6 +35,10 @@ public class ApiClient {
         return client;
     }
 
+    /**
+     * 
+     * @throws Exception
+     */
     public ApiClient() throws Exception {
         InputStream is = getClass().getResourceAsStream("/application.properties");
         Properties props = new Properties();
@@ -41,11 +47,11 @@ public class ApiClient {
         this.port = props.getProperty("api.port");
     }
 
-    public ClientResponse execute(String service) throws ApiFailureException {
+    protected ClientResponse execute(String service) throws ApiFailureException {
         return execute(service, null);
     }
 
-    public ClientResponse execute(String service, String result) throws ApiFailureException {
+    protected ClientResponse execute(String service, String result) throws ApiFailureException {
         Request request = new Request();
         request.setToken(TOKEN);
         request.setResult(result);
@@ -54,11 +60,16 @@ public class ApiClient {
                     .type(MediaType.APPLICATION_JSON_TYPE)
                     .accept(MediaType.APPLICATION_JSON_TYPE)
                     .post(ClientResponse.class, request);
-        } catch (Exception e) {
+        } catch (ClientHandlerException | UniformInterfaceException e) {
             throw new ApiFailureException(e);
         }
     }
 
+    /**
+     * Launch a start
+     * @return The expected size of the searched string
+     * @throws ApiFailureException
+     */
     public int start() throws ApiFailureException {
         ClientResponse response = null;
         try {
@@ -75,6 +86,12 @@ public class ApiClient {
         }
     }
 
+    /**
+     * Sends the provided string for testing
+     * @param proposal String to test
+     * @return The result of the proposition
+     * @throws ApiFailureException
+     */
     public ProposalResult test(String proposal) throws ApiFailureException {
         ClientResponse response = null;
         try {
